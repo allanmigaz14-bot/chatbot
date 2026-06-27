@@ -1,56 +1,72 @@
-import streamlit as st
-from openai import OpenAI
-
-# Show title and description.
-st.title("💬 Chatbot")
-st.write(
-    "This is a simple chatbot that uses OpenAI's GPT-3.5 model to generate responses. "
-    "To use this app, you need to provide an OpenAI API key, which you can get [here](https://platform.openai.com/account/api-keys). "
-    "You can also learn how to build this app step by step by [following our tutorial](https://docs.streamlit.io/develop/tutorials/llms/build-conversational-apps)."
-)
-
-# Ask user for their OpenAI API key via `st.text_input`.
-# Alternatively, you can store the API key in `./.streamlit/secrets.toml` and access it
-# via `st.secrets`, see https://docs.streamlit.io/develop/concepts/connections/secrets-management
-openai_api_key = st.text_input("OpenAI API Key", type="password")
-if not openai_api_key:
-    st.info("Please add your OpenAI API key to continue.", icon="🗝️")
-else:
-
-    # Create an OpenAI client.
-    client = OpenAI(api_key=openai_api_key)
-
-    # Create a session state variable to store the chat messages. This ensures that the
-    # messages persist across reruns.
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
-
-    # Display the existing chat messages via `st.chat_message`.
-    for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
-
-    # Create a chat input field to allow the user to enter a message. This will display
-    # automatically at the bottom of the page.
-    if prompt := st.chat_input("What is up?"):
-
-        # Store and display the current prompt.
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
-            st.markdown(prompt)
-
-        # Generate a response using the OpenAI API.
-        stream = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": m["role"], "content": m["content"]}
-                for m in st.session_state.messages
-            ],
-            stream=True,
-        )
-
-        # Stream the response to the chat using `st.write_stream`, then store it in 
-        # session state.
-        with st.chat_message("assistant"):
-            response = st.write_stream(stream)
-        st.session_state.messages.append({"role": "assistant", "content": response})
+[
+      {
+            "id": "etsy_printables",
+                "name": "Etsy Digital Printables",
+                    "skills": ["design", "writing", "canva", "creative", "art"],
+                        "min_hours": 5,
+                            "max_hours": 20,
+                                "min_budget": 0,
+                                    "max_budget": 50,
+                                        "free_tip": "Use free Canva to make 3 inspirational quote prints. List them on Etsy for $3.50 each. Use Pinterest to find trending quote styles first.",
+                                            "paid_plan": {
+                                                      "price": 9,
+                                                            "includes": [
+                                                                        "50 trending niches for this month",
+                                                                                "Canva templates for 10 best-sellers: wall art, planners, worksheets",
+                                                                                        "Etsy SEO script: titles, tags, descriptions that rank",
+                                                                                                "30-day launch checklist: what to post daily"
+                                                            ],
+                                                                  "affiliate_links": []
+                                            }
+      },
+        {
+                "id": "freelance_writing",
+                    "name": "AI-Assisted Freelance Writing",
+                        "skills": ["writing", "research", "english", "blogging"],
+                            "min_hours": 10,
+                                "max_hours": 40,
+                                    "min_budget": 0,
+                                        "max_budget": 0,
+                                            "free_tip": "Make a free Upwork profile. Offer 'blog posts with AI assist'. Charge $15 for 500 words. Use the free version of Claude or ChatGPT to draft, then edit.",
+                                                "paid_plan": {
+                                                          "price": 9,
+                                                                "includes": [
+                                                                            "3 proposal templates that land clients",
+                                                                                    "List of 20 job boards beyond Upwork",
+                                                                                            "AI prompt pack for 5 types of articles",
+                                                                                                    "Pricing calculator so you don't undercharge"
+                                                                ],
+                                                                      "affiliate_links": []
+                                                }
+        },
+          {
+                "id": "phone_flipping",
+                    "name": "Phone Flipping Kenya",
+                        "skills": ["sales", "negotiating", "fixing stuff", "phones", "tech"],
+                            "min_hours": 5,
+                                "max_hours": 20,
+                                    "min_budget": 200,
+                                        "max_budget": 1000,
+                                            "free_tip": "Start with 1 phone. Buy damaged iPhone 7/8 on Facebook Marketplace, replace screen for 1.5k KES, sell for 3k profit. Use phone repair YouTube tutorials.",
+                                                "paid_plan": {
+                                                          "price": 9,
+                                                                "includes": [
+                                                                            "Models with highest profit margins in Kenya right now",
+                                                                                    "Supplier contacts for parts in Nairobi",
+                                                                                            "Checklist: 12 things to test before buying used",
+                                                                                                    "Pricing sheet: what to pay vs sell"
+                                                                ],
+                                                                      "affiliate_links": []
+                                                }
+          }
+]
+                                                                ]
+                                                }
+          }
+                                                                ]
+                                                }
+        }
+                                                            ]
+                                            }
+      }
+]
